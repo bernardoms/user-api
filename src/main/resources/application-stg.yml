@@ -1,0 +1,16 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb://local:local@localhost:27017/local?authSource=admin&authMechanism=SCRAM-SHA-1
+      auto-index-creation: true
+  cache:
+    caffeine:
+      spec: maximumSize=500, expireAfterAccess=10m
+    cache-names: user
+
+sns:
+  endpoint: http://localhost:4575
+  region: us-east-1
+  accessKey: local
+  secretKey: local
+  topic: arn:aws:sns:us-east-1:000000000000:user_update_notify

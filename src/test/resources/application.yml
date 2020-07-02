@@ -1,0 +1,13 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017
+      auto-index-creation: true
+      database: test
+
+sns:
+  endpoint: http://localhost:4575
+  region: us-east-1
+  accessKey: local
+  secretKey: local
+  topic: arn:aws:sns:us-east-1:000000000000:user_update_notify
