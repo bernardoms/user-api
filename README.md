@@ -28,6 +28,7 @@
  
  * Running jar with only mongo and localstack on a docker: 
   `./mvnw clean package` 
+   `cd deps`
   `docker-compose up -d localstack mongo` 
   `java -jar target/user-0.0.1-SNAPSHOT.jar` 
 
