@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -29,7 +28,7 @@ public class ExceptionController {
     @ExceptionHandler({NicknameAlreadyExistException.class})
     private ResponseEntity<Object> handleNickNameAlreadyExistException(NicknameAlreadyExistException ex, HttpServletRequest request) {
         log.info("nick name already exist : " + request.getRequestURI(), ex);
-        return new ResponseEntity<>(mountError(ex), HttpStatus.UNPROCESSABLE_ENTITY);
+        return new ResponseEntity<>(mountError(ex), HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler({UserNotFoundException.class})
@@ -48,11 +47,11 @@ public class ExceptionController {
     @ExceptionHandler({MethodArgumentNotValidException.class})
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpServletRequest request) {
         Map<String, String> details = new HashMap<>();
+
         var errors = new HashMap<>();
 
-        for (FieldError fieldError : ex.getBindingResult().getFieldErrors()) {
-            details.put(fieldError.getField(), fieldError.getDefaultMessage());
-        }
+        ex.getBindingResult().getFieldErrors().forEach(field -> details.put(field.getField(), field.getDefaultMessage()));
+
         errors.put("description", details);
 
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);

@@ -126,7 +126,7 @@ public class UserControllerUnitTest {
                 .build();
 
         mockMvc.perform(post(URL_PATH).content(mapper.writeValueAsString(newUser)).contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isUnprocessableEntity())
+                .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.description", is("user with nick name test_nick already exist!")));
     }
 

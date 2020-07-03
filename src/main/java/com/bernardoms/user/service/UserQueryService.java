@@ -12,7 +12,6 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -21,24 +20,30 @@ public class UserQueryService {
     private final MongoOperations mongoOperations;
 
     public Page<User> returnPageableFilteredUser(UserFilter userFilter) {
-        Query query = new Query();
-
-        Optional.ofNullable(userFilter.getFirstName()).ifPresent(c->query.addCriteria(Criteria.where("firstName").is(userFilter.getFirstName())));
-
-        Optional.ofNullable(userFilter.getLastName()).ifPresent(c->query.addCriteria(Criteria.where("lastName").is(userFilter.getLastName())));
-
-        Optional.ofNullable(userFilter.getCountry()).ifPresent(c->query.addCriteria(Criteria.where("country").is(userFilter.getCountry())));
-
-        Optional.ofNullable(userFilter.getNickname()).ifPresent(c->query.addCriteria(Criteria.where("nickname").is(userFilter.getNickname())));
-
-        Optional.ofNullable(userFilter.getEmail()).ifPresent(c->query.addCriteria(Criteria.where("email").is(userFilter.getEmail())));
+        var query = buildQuery(userFilter);
 
         var pageable = PageRequest.of(userFilter.getOffset(), userFilter.getLimit(), Sort.unsorted());
 
-        long count = mongoOperations.count(query, User.class);
+        var count = mongoOperations.count(query, User.class);
 
-        List<User> users = mongoOperations.find(query.with(pageable), User.class);
+        var users = mongoOperations.find(query.with(pageable), User.class);
 
         return new PageImpl<>(users, pageable, count);
+    }
+
+    private Query buildQuery(UserFilter userFilter) {
+        var query = new Query();
+
+        Optional.ofNullable(userFilter.getFirstName()).ifPresent(name->query.addCriteria(Criteria.where("firstName").is(name)));
+
+        Optional.ofNullable(userFilter.getLastName()).ifPresent(lastName->query.addCriteria(Criteria.where("lastName").is(lastName)));
+
+        Optional.ofNullable(userFilter.getCountry()).ifPresent(country->query.addCriteria(Criteria.where("country").is(country)));
+
+        Optional.ofNullable(userFilter.getNickname()).ifPresent(nickname->query.addCriteria(Criteria.where("nickname").is(nickname)));
+
+        Optional.ofNullable(userFilter.getEmail()).ifPresent(email->query.addCriteria(Criteria.where("email").is(email)));
+
+        return query;
     }
 }

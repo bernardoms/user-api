@@ -21,7 +21,7 @@ public class UserNotifyServiceImpl implements UserNotifyService {
     @Override
     public void publish(UserDTO userDTO) throws JsonProcessingException {
         log.info("user was updated, notifying to sns " + userDTO);
-        PublishRequest publishRequest = new PublishRequest(userQueueConfig.getTopic(), objectMapper.writeValueAsString(userDTO));
+        var publishRequest = new PublishRequest(userQueueConfig.getTopic(), objectMapper.writeValueAsString(userDTO));
         amazonSNSAsync.publish(publishRequest);
     }
 }
