@@ -30,7 +30,11 @@
   `./mvnw clean package` 
    `cd deps`
   `docker-compose up -d localstack mongo` 
-  `java -jar target/user-0.0.1-SNAPSHOT.jar` 
+  `java -jar target/user-0.0.1-SNAPSHOT.jar`
+  
+ * For be able to read messages sent to SNS I create a consumer on localstack when the container is up,
+ so it's possible to list messages using aws client with command 
+  `aws --region=us-east-1 --endpoint-url=http://localhost:4576 sqs receive-message --queue-url http://localhost:4576/user_notify_queue_1` 
 
  
 ### Some assumptions
