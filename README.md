@@ -24,7 +24,7 @@
  * You can edit the docker-compose yml and add a new-relic license key to see/monitoring the api at newrelic.
  * You can see logs on a local kibana at http://localhost:5601 just need to create an index on kibana for be able to 
  look at the logs.
- * You can the api endpoints at http://localhost:8080/swagger-ui.html
+ * You can see the api endpoints at http://localhost:8080/swagger-ui.html
  
  * Running jar with only mongo and localstack on a docker: 
   `./mvnw clean package` 
