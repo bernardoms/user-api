@@ -1,7 +1,6 @@
 package com.bernardoms.user.config;
 
 
-import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.client.builder.AwsClientBuilder;
@@ -27,15 +26,14 @@ public class UserQueueConfig {
     private String topic;
 
     @Bean
-    public AWSCredentialsProvider awsCredentialsProvider() {
-        return new AWSStaticCredentialsProvider(new BasicAWSCredentials(accessKey, secretKey));
+    public BasicAWSCredentials awsCredentialsProvider() {
+        return new BasicAWSCredentials(accessKey, secretKey);
     }
 
     @Bean
     public AmazonSNSAsync amazonSnsAsync() {
-        BasicAWSCredentials awsCreds = new BasicAWSCredentials(accessKey, secretKey);
         return AmazonSNSAsyncClientBuilder.standard()
-                .withCredentials(new AWSStaticCredentialsProvider(awsCreds))
+                .withCredentials(new AWSStaticCredentialsProvider(awsCredentialsProvider()))
                 .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(endpoint, region))
                 .build();
     }
